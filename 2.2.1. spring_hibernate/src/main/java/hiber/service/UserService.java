@@ -13,4 +13,8 @@ public interface UserService {
     @Transactional(readOnly = true)
     User getUserByModelAndSeries(String model, int series);
 
+
+    @Transactional(readOnly = true)
+    List <User> getUsersByModelAndSeries(String model, int series);
+
 }

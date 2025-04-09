@@ -31,4 +31,9 @@ public class UserServiceImp implements UserService {
    public User getUserByModelAndSeries(String model, int series) {
       return userDao.getUserByModelAndSeries(model, series);
    }
+
+   @Override
+   public List<User> getUsersByModelAndSeries(String model, int series) {
+      return userDao.getUsersByModelAndSeries(model, series);
+   }
 }
