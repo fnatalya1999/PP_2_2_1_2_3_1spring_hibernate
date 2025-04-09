@@ -1,5 +1,6 @@
 package hiber.config;
 
+import hiber.model.Car;
 import hiber.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,15 +26,23 @@ public class AppConfig {
    @Autowired
    private Environment env;
 
+
+
    @Bean
    public DataSource getDataSource() {
       DriverManagerDataSource dataSource = new DriverManagerDataSource();
-      dataSource.setDriverClassName(env.getProperty("db.driver"));
-      dataSource.setUrl(env.getProperty("db.url"));
-      dataSource.setUsername(env.getProperty("db.username"));
-      dataSource.setPassword(env.getProperty("db.password"));
+      try {
+         dataSource.setDriverClassName(env.getProperty("db.driver"));
+         dataSource.setUrl(env.getProperty("db.url"));
+         dataSource.setUsername(env.getProperty("db.username"));
+         dataSource.setPassword(env.getProperty("db.password"));
+         dataSource.getConnection().isValid(2);
+         System.out.println("Успешное подключение к базе данных.");
+      }catch (Exception e) {
+         System.out.println("Ошибка подключения к базе данных: " + e.getMessage());
+      }
       return dataSource;
-   }
+      }
 
    @Bean
    public LocalSessionFactoryBean getSessionFactory() {
@@ -45,7 +54,7 @@ public class AppConfig {
       props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
 
       factoryBean.setHibernateProperties(props);
-      factoryBean.setAnnotatedClasses(User.class);
+      factoryBean.setAnnotatedClasses(User.class, Car.class);
       return factoryBean;
    }
 
